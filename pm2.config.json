@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "airbuk-flight-api",
+      "script": "npm",
+      "args": "run start:prod"
+    }
+  ]
+}
