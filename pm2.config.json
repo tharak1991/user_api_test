@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "airbuk-flight-api",
+      "name": "airbuk-credential-api",
       "script": "npm",
       "args": "run start:prod"
     }

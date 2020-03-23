@@ -14,6 +14,11 @@ final.flight_status = {
     appKey: '0f46bd73c00d1c04d3ed688d3af8fb7d',
 };
 
-final.port = PORT || 3002;
+
+final.fixer = {
+    appKey: '62f6e72fe39a5bd6a213f3b763d5b5ad',
+};
+
+final.port = PORT || 3004;
 
 module.exports = final;
