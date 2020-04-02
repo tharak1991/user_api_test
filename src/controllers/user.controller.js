@@ -16,6 +16,8 @@ exports.checkPassword = password => {
     } else {
         throw "PASSWORD DONT MEET POLICY!";
     }
-}
+};
 
 exports.save = data => new user_model(data).save();
+
+exports.login = (email, password) => user_model.findOne({$and: [{email}, {password}]}).exec();
