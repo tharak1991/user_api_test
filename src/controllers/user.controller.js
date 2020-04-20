@@ -4,6 +4,7 @@ exports.getFinalData = body => {
     return {
         name: body.name,
         email: body.email,
+        image: body.image,
         password: body.password,
         username: body.name.toLowerCase().replace(/-/g, "").replace(/ /g, "-"),
         addedDate: new Date(),
