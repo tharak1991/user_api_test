@@ -9,7 +9,7 @@ routes.post('/register', async (req, res, next) => {
         user_controller.checkPassword(req.body.password);
         let finalData = user_controller.getFinalData(req.body);
         await user_controller.save(finalData);
-        res.json({status: true});
+        await res.json({status: true});
     } catch (e) {
         console.error(e);
         next();
@@ -23,9 +23,9 @@ routes.post("/login", async (req, res, next) => {
         if (user) {
             delete user.password;
             let token = token_controller.sign(user._id);
-            res.json({status: true, token, user});
+            await res.json({status: true, token, user});
         } else {
-            res.json({status: false, token: {}});
+            await res.json({status: false, token: {}});
         }
     } catch (e) {
         console.error(e);
@@ -37,9 +37,9 @@ routes.post("/check/token", async (req, res, next) => {
     try {
         let token = token_controller.verify(req.body.token);
         if (token) {
-            res.json({status: true});
+            await res.json({status: true});
         } else {
-            res.json({status: false});
+            await res.json({status: false});
         }
     } catch (e) {
         console.error(e);

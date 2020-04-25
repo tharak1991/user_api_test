@@ -1,6 +1,7 @@
 const productionConfig = {
   isDev: false,
-  DB_URL: 'mongodb://airbuk:1234qwerasd@54.36.173.197:27017',
+  // DB_URL: 'mongodb://airbuk:1234qwerasd@54.36.173.197:27017',
+  DB_URL: 'mongodb://airbuk:qwerty1234@ds031319.mlab.com:31319',
   DB_NAME: 'airbuk',
   TOKEN_SECRET: 'TOKEN_SECRET',
   TOKEN_OPTIONS: {
