@@ -6,6 +6,7 @@ exports.getFinalData = body => {
         email: body.email,
         image: body.image,
         password: body.password,
+        bank_country: body.bank_country,
         username: body.name.toLowerCase().replace(/-/g, "").replace(/ /g, "-"),
         addedDate: new Date(),
     };
