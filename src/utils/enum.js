@@ -1,4 +1,4 @@
-export const userType = {
+exports.userType = {
     "EMAIL": "EMAIL",
     "FACEBOOK": "FACEBOOK",
     "GOOGLE": "GOOGLE",
