@@ -7,7 +7,7 @@ const userSchema = new Schema({
     email: {type: String, required: true, unique: true},
     phone: {type: String},
     image: {type: String},
-    state: {type: String, enum: [...Object.values({userType})], required: true},
+    type: {type: String, enum: [...Object.values(userType)], required: true},
     password: {type: String},
     username: {type: String, required: true},
     dob: {type: Date},
