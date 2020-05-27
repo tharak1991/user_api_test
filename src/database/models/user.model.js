@@ -10,6 +10,10 @@ const userSchema = new Schema({
     type: {type: String, enum: [...Object.values(userType)], required: true},
     password: {type: String},
     username: {type: String, required: true},
+    rating: {
+        aggregate: {type: Number, default: 0},
+        count: {type: Number, default: 0},
+    },
     dob: {type: Date},
     bank_country: {type: Schema.ObjectId, ref: "countries", required: true},
     addedDate: {type: Date, required: true, default: new Date()},
