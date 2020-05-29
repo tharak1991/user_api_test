@@ -20,8 +20,9 @@ routes.post('/register', async (req, res, next) => {
 routes.post('/register/google', async (req, res, next) => {
     try {
         let finalData = user_controller.getFinalData(req.body, userType.GOOGLE);
-        await user_controller.save(finalData);
-        await res.json({status: true});
+        let user = await user_controller.save(finalData);
+        let token = token_controller.sign(user._id);
+        await res.json({status: true, token, user});
     } catch (e) {
         console.error(e);
         next();
@@ -50,8 +51,9 @@ routes.post('/register/instagram', async (req, res, next) => {
 routes.post('/register/twitter', async (req, res, next) => {
     try {
         let finalData = user_controller.getFinalData(req.body, userType.TWITTER);
-        await user_controller.save(finalData);
-        await res.json({status: true});
+        let user = await user_controller.save(finalData);
+        let token = token_controller.sign(user._id);
+        await res.json({status: true, token, user});
     } catch (e) {
         console.error(e);
         next();
@@ -61,6 +63,7 @@ routes.post('/register/twitter', async (req, res, next) => {
 routes.post("/login", async (req, res, next) => {
     try {
         let {email, password} = req.body;
+        user_controller.checkPassword(req.body.password);
         let user = await user_controller.login(email, password);
         if (user) {
             delete user.password;
@@ -75,9 +78,11 @@ routes.post("/login", async (req, res, next) => {
     }
 });
 
+
 routes.post("/login/social", async (req, res, next) => {
     try {
-        let user = await user_controller.loginSocial(req.body.email);
+        let user = await user_controller.loginSocial(req.body);
+        console.log(req.body, user)
         if (user) {
             let token = token_controller.sign(user._id);
             await res.json({status: true, token, user});

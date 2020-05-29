@@ -24,18 +24,9 @@ exports.checkPassword = password => {
 exports.save = data => new user_model(data).save();
 
 exports.login = (email, password) => user_model.findOne({$and: [{email}, {password}]}).exec();
-exports.loginSocial = email => user_model.findOne({
+exports.loginSocial = ({email, provider}) => user_model.findOne({
     $and: [
-        {
-            email: email
-        },
-        {
-            $or: [
-                {type: userType.TWITTER},
-                {type: userType.INSTAGRAM},
-                {type: userType.FACEBOOK},
-                {type: userType.GOOGLE},
-            ]
-        }
+        {email: email},
+        {type: provider}
     ]
 }).exec();
