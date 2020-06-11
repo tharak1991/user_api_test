@@ -4,4 +4,5 @@ exports.userType = {
     "GOOGLE": "GOOGLE",
     "INSTAGRAM": "INSTAGRAM",
     "TWITTER": "TWITTER",
+    "APPLESSO": "APPLESSO",
 };

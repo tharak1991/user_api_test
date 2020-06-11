@@ -48,6 +48,17 @@ routes.post('/register/instagram', async (req, res, next) => {
         next();
     }
 });
+
+routes.post('/register/applesso', async (req, res, next) => {
+    try {
+        let finalData = user_controller.getFinalData(req.body, userType.APPLESSO);
+        await user_controller.save(finalData);
+        await res.json({status: true});
+    } catch (e) {
+        console.error(e);
+        next();
+    }
+});
 routes.post('/register/twitter', async (req, res, next) => {
     try {
         let finalData = user_controller.getFinalData(req.body, userType.TWITTER);
@@ -68,6 +79,7 @@ routes.post("/login", async (req, res, next) => {
         if (user) {
             delete user.password;
             let token = token_controller.sign(user._id);
+            console.log(token,user)
             await res.json({status: true, token, user});
         } else {
             await res.json({status: false, token: {}});
