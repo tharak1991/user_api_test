@@ -7,6 +7,7 @@ exports.getFinalData = (body, type) => {
         image: body.image,
         password: body.password || null,
         type: type,
+        verified: type !== userType.EMAIL,
         bank_country: body.bank_country,
         username: body.name.toLowerCase().replace(/-/g, "").replace(/ /g, "-"),
         addedDate: new Date(),
@@ -23,10 +24,17 @@ exports.checkPassword = password => {
 
 exports.save = data => new user_model(data).save();
 
-exports.login = (email, password) => user_model.findOne({$and: [{email}, {password}]}).exec();
+exports.login = (email, password) => user_model.findOne({
+    $and: [
+        {email: email},
+        {password: password}
+    ]
+}).exec();
+
 exports.loginSocial = ({email, provider}) => user_model.findOne({
     $and: [
         {email: email},
-        {type: provider}
+        {type: provider},
+        {verified: true},
     ]
 }).exec();

@@ -2,6 +2,7 @@ const express = require('express');
 const routes = express.Router();
 
 const user_controller = require('../controllers/user.controller');
+const email_controller = require("../controllers/email.controller");
 const token_controller = require('../controllers/token.controller');
 const {userType} = require("../utils/enum");
 
@@ -9,7 +10,8 @@ routes.post('/register', async (req, res, next) => {
     try {
         user_controller.checkPassword(req.body.password);
         let finalData = user_controller.getFinalData(req.body, userType.EMAIL);
-        await user_controller.save(finalData);
+        let user = await user_controller.save(finalData);
+        await email_controller.sendOTP(user._id);
         await res.json({status: true});
     } catch (e) {
         console.error(e);
@@ -78,9 +80,12 @@ routes.post("/login", async (req, res, next) => {
         let user = await user_controller.login(email, password);
         if (user) {
             delete user.password;
-            let token = token_controller.sign(user._id);
-            console.log(token,user)
-            await res.json({status: true, token, user});
+            if (user.verified) {
+                let token = token_controller.sign(user._id);
+                await res.json({status: true, token, user});
+            } else {
+                await res.json({status: false, verified: false, token: {}});
+            }
         } else {
             await res.json({status: false, token: {}});
         }
@@ -94,7 +99,7 @@ routes.post("/login", async (req, res, next) => {
 routes.post("/login/social", async (req, res, next) => {
     try {
         let user = await user_controller.loginSocial(req.body);
-        console.log(req.body, user)
+        console.log(req.body, user);
         if (user) {
             let token = token_controller.sign(user._id);
             await res.json({status: true, token, user});

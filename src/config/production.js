@@ -11,7 +11,11 @@ const productionConfig = {
     REFRESH_TOKEN_OPTIONS: {
         expiresIn: '7d',
     },
-    image_url: "http://api.airbuk.com/image/"
+    image_url: "http://api.airbuk.com/image/",
+    mail: {
+        email: "no-reply@airbuk.com",
+        password: "Qwerty171",
+    }
 };
 
 productionConfig.DB_URI = `${productionConfig.DB_URL}/${productionConfig.DB_NAME}`;

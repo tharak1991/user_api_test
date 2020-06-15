@@ -15,6 +15,7 @@ const userSchema = new Schema({
         count: {type: Number, default: 0},
     },
     dob: {type: Date},
+    verified: {type: Boolean, required: true, default: false},
     bank_country: {type: Schema.ObjectId, ref: "countries", required: true},
     addedDate: {type: Date, required: true, default: new Date()},
     lastActive: {type: Date, required: true, default: new Date()},

@@ -1,25 +1,34 @@
-const nodemailer = require("nodemailer");
+var nodemailer = require('nodemailer');
 
-async function main() {
-    let transporter = nodemailer.createTransport({
-        host: "cwp.realwebsolution.in",
-        port: 465,
-        secure: true,
-        auth: {
-            user: 'no-reply@lifestubborn.com',
-            pass: 'E08zXVmwiRAs'
-        }
-    });
+var transporter = nodemailer.createTransport({
+    host: "smtp-mail.outlook.com",
+    secureConnection: false,
+    port: 587, // port for secure SMTP
+    tls: {
+        ciphers:'SSLv3'
+    },
+    auth: {
+        user: 'no-reply@airbuk.com',
+        pass: 'Qwerty171'
+    }
+});
 
-    let info = await transporter.sendMail({
-        from: `"Fred Foo 👻" <no-reply@lifestubborn.com>`,
-        to: "vinit928@gmail.com",
-        subject: "Hello ✔",
-        text: "Hello world?",
-        html: "<b>Hello world?</b>"
-    });
+var mailOptions = {
+    from: '"Our Code World " <no-reply@airbuk.com>',
+    to: 'vinit928@gmail.com',
+    subject: 'Hello ',
+    text: 'Hello world ',
+    html: '<b>Hello world </b><br> This is the first email sent with Nodemailer in Node.js'
+};
 
-    console.log("Message sent: %s", info.messageId);
-}
+// send mail with defined transport object
+transporter.sendMail(mailOptions, function(error, info){
+    if(error){
+        return console.log(error);
+    }
 
-main().catch(console.error);
+    console.log('Message sent: ' + info.response);
+});
+
+// no-reply@airbuk.com
+// Qwerty171

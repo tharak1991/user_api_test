@@ -10,6 +10,10 @@ const developmentConfig = {
     REFRESH_TOKEN_OPTIONS: {
         expiresIn: '7d',
     },
+    mail: {
+        username: "no-reply@airbuk.com",
+        password: "Qwerty171",
+    }
 };
 
 developmentConfig.DB_URI = `${developmentConfig.DB_URL}/${developmentConfig.DB_NAME}`;
