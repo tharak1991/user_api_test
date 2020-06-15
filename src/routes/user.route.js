@@ -84,7 +84,7 @@ routes.post("/login", async (req, res, next) => {
                 let token = token_controller.sign(user._id);
                 await res.json({status: true, token, user});
             } else {
-                await res.json({status: false, verified: false, token: {}});
+                await res.json({status: false, verified: false, userId: user._id, token: {}});
             }
         } else {
             await res.json({status: false, token: {}});
@@ -95,6 +95,34 @@ routes.post("/login", async (req, res, next) => {
     }
 });
 
+routes.post("/otp/validate", async (req, res, next) => {
+    try {
+        let {otp, user} = req.body;
+        let validate = await email_controller.validateOTP(otp, user);
+        if (validate) {
+            await res.json({status: true});
+        } else {
+            await res.json({status: false});
+        }
+    } catch (e) {
+        console.error(e);
+        next();
+    }
+});
+routes.post("/otp/resend", async (req, res, next) => {
+    try {
+        let {user} = req.body;
+        let resend = await email_controller.sendOTP(user);
+        if (resend) {
+            await res.json({status: true});
+        } else {
+            await res.json({status: false});
+        }
+    } catch (e) {
+        console.error(e);
+        next();
+    }
+});
 
 routes.post("/login/social", async (req, res, next) => {
     try {
