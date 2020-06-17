@@ -13,7 +13,7 @@ const productionConfig = {
     },
     image_url: "http://api.airbuk.com/image/",
     mail: {
-        email: "no-reply@airbuk.com",
+        username: "no-reply@airbuk.com",
         password: "Qwerty171",
     }
 };
