@@ -5,6 +5,7 @@ exports.getFinalData = (body, type) => {
     return {
         name: body.name,
         email: body.email,
+        social_id: body.id,
         image: body.image,
         password: body.password || null,
         type: type,
@@ -32,17 +33,33 @@ exports.login = (email, password) => user_model.findOne({
     ]
 }).exec();
 
-exports.loginSocial = ({email, provider}) => user_model.findOne({
-    $and: [
-        {email: email},
-        {
-            $or: [
-                {type: {$ne: null}},
-                {password: {$ne: null}}
+exports.loginSocial = ({email, provider, id}) => {
+    if (provider === userType.FACEBOOK || provider === userType.INSTAGRAM) {
+        return user_model.findOne({
+            $and: [
+                {social_id: id},
+                {
+                    $or: [
+                        {type: userType.INSTAGRAM},
+                        {type: userType.FACEBOOK}
+                    ]
+                }
             ]
-        },
-    ]
-}).exec();
+        }).exec();
+    } else {
+        return user_model.findOne({
+            $and: [
+                {email: email},
+                {
+                    $or: [
+                        {type: {$ne: null}},
+                        {password: {$ne: null}}
+                    ]
+                },
+            ]
+        }).exec();
+    }
+};
 
 exports.verifyUser = async (userId) => {
     await user_model.findByIdAndUpdate(userId, {$set: {verified: true}})
