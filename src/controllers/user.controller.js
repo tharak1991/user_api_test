@@ -35,7 +35,21 @@ exports.login = (email, password) => user_model.findOne({
 exports.loginSocial = ({email, provider}) => user_model.findOne({
     $and: [
         {email: email},
-        {type: provider},
-        {verified: true},
+        {
+            $or: [
+                {type: {$ne: null}},
+                {password: {$ne: null}}
+            ]
+        },
     ]
 }).exec();
+
+exports.verifyUser = async (userId) => {
+    await user_model.findByIdAndUpdate(userId, {$set: {verified: true}})
+};
+
+exports.getById = async id => {
+    let user = await user_model.findById(id);
+    delete user.password;
+    return user;
+}

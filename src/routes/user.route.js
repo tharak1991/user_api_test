@@ -100,7 +100,9 @@ routes.post("/otp/validate", async (req, res, next) => {
         let {otp, user} = req.body;
         let validate = await email_controller.validateOTP(otp, user);
         if (validate) {
-            await res.json({status: true});
+            let user_data = await user_controller.getById(user);
+            let token = token_controller.sign(user_data._id);
+            await res.json({status: true, user: user_data, token});
         } else {
             await res.json({status: false});
         }
@@ -127,8 +129,10 @@ routes.post("/otp/resend", async (req, res, next) => {
 routes.post("/login/social", async (req, res, next) => {
     try {
         let user = await user_controller.loginSocial(req.body);
-        console.log(req.body, user);
         if (user) {
+            if (!user.verified) {
+                await user_controller.verifyUser(user._id);
+            }
             let token = token_controller.sign(user._id);
             await res.json({status: true, token, user});
         } else {
