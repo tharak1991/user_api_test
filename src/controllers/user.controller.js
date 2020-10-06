@@ -5,12 +5,8 @@ exports.getFinalData = (body, type) => {
     return {
         name: body.name,
         email: body.email,
-        social_id: body.id,
-        image: body.image,
+        phone: body.phone,
         password: body.password || null,
-        type: type,
-        verified: type !== userType.EMAIL,
-        bank_country: body.bank_country,
         username: body.name.toLowerCase().replace(/-/g, "").replace(/ /g, "-"),
         addedDate: new Date(),
     };

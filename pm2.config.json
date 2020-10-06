@@ -1,9 +1,0 @@
-{
-  "apps": [
-    {
-      "name": "airbuk-credential-api",
-      "script": "npm",
-      "args": "run start:prod"
-    }
-  ]
-}

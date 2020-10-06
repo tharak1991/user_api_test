@@ -11,11 +11,11 @@ routes.post('/register', async (req, res, next) => {
         user_controller.checkPassword(req.body.password);
         let finalData = user_controller.getFinalData(req.body, userType.EMAIL);
         let user = await user_controller.save(finalData);
-        await email_controller.sendOTP(user._id);
+       // await email_controller.sendOTP(user._id);
         await res.json({status: true, user: user._id});
     } catch (e) {
         console.error(e);
-        next();
+        await res.json({status: false, error: e});
     }
 });
 
