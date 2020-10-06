@@ -40,6 +40,37 @@ routes.post('/upload', upload.single('image'), (req, res) => {
 });
 
 
+routes.post('/upload/:empid', upload.single('image'),async (req, res) => {
+    try {
+        const empid = req.params.empid;
+        console.log(req.file.path);
+        if(req.file.path){
+            let updateEmployee = await employee_controller.updateEmployee(empid, req.file.path);
+            if (updateEmployee) {
+                await res.status(200).json({
+                    status: true,
+                    employee: updateEmployee
+                });
+            } else {
+                await res.status(200).json({
+                    status: false,
+                    employee: updateEmployee,
+                    msg: 'Employee not found'
+                });
+            }
+
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({
+            status: false,
+            error: e
+        });
+        next();
+    }
+});
+
+
 
 routes.get('/download', function(req, res){
     try {

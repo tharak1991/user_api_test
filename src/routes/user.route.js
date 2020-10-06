@@ -144,7 +144,7 @@ routes.get("/:id", async (req, res, next) => {
 
 routes.put("/:id", async (req, res, next) => {
     try {
-        const id = req.params.id
+        const id = req.params.id;
         const user = req.body.user;
         let updatedUser = await user_controller.updateUser(id, user);
         if (updatedUser) {
