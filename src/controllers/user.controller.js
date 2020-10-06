@@ -39,10 +39,9 @@ exports.getById = async id => {
 }
 
 
-exports.updateUser = async (userId) => {
-    return await user_model.findByIdAndUpdate(userId,{ name: 'new2',
-        phone: '0000000'
-    })
+exports.updateUser = async (userId, user) => {
+    const updateUser = await user_model.findByIdAndUpdate(userId,user);
+    return  updateUser ;
 };
 
 
@@ -50,4 +49,9 @@ exports.getAllUsers = async () => {
     let user = await user_model.find();
     delete user.password;
     return user;
+}
+
+
+exports.deleteUser = async id => {
+    return await user_model.findByIdAndRemove(id);
 }

@@ -6,6 +6,7 @@ const compression = require('compression');
 const cookieParser = require('cookie-parser');
 
 const user_route = require('./routes/user.route');
+const employee_route = require('./routes/employee.route');
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(cors());
 app.use(morgan('dev'));
 
 app.use('/user/', user_route);
+app.use('/employee/', employee_route);
 
 app.use('*', (req, res) => {
     res.sendStatus(404);
