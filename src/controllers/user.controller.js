@@ -39,6 +39,13 @@ exports.getById = async id => {
 }
 
 
+exports.updateUser = async (userId) => {
+    return await user_model.findByIdAndUpdate(userId,{ name: 'new2',
+        phone: '0000000'
+    })
+};
+
+
 exports.getAllUsers = async () => {
     let user = await user_model.find();
     delete user.password;

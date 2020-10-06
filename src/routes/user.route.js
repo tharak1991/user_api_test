@@ -79,7 +79,7 @@ routes.get("/all", async (req, res, next) => {
 
 routes.get("/:id", async (req, res, next) => {
     try {
-        const id = req.params.id
+        const id = req.params.id;
         console.log(id);
         let user = await user_controller.getById(id);
         console.log(user);
@@ -87,6 +87,25 @@ routes.get("/:id", async (req, res, next) => {
             await res.status(200).json({status: true, user: user});
         }else{
             await res.status(200).json({status: false,user: user, msg: 'User not found'});
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({status: false, error: e});
+        next();
+    }
+});
+
+routes.put("/:id", async (req, res, next) => {
+    try {
+        const id = req.params.id
+        //const user = req.body.user;
+        console.log(id);
+        let updatedUser = await user_controller.updateUser(id);
+        console.log(updatedUser);
+        if(updatedUser){
+            await res.status(200).json({status: true, user: updatedUser});
+        }else{
+            await res.status(200).json({status: false,user: updatedUser, msg: 'User not found'});
         }
     } catch (e) {
         console.error(e);
