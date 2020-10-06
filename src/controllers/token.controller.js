@@ -8,7 +8,6 @@ exports.sign = data => {
 exports.verify = token => {
     try {
         let decoded = jwt.verify(token, config.jwt.key);
-        console.log(decoded);
         return true;
     } catch (e) {
         return false;

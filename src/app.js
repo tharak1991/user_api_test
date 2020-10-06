@@ -27,8 +27,15 @@ app.use(cors());
 app.use(morgan('dev'));
 
 
+/***
+ * User Model Routes
+ */
+app.use('/user/', user_route); 
 
-app.use('/user/', user_route);
+
+/***
+ * Employee Model Routes
+ */
 app.use('/employee/', employee_route);
 
 

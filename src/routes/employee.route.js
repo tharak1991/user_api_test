@@ -31,7 +31,7 @@ routes.post('/add', async (req, res, next) => {
 
 
 /***
- * Promise Imeplementation
+ * callback + promise Implementation
  */
 
 routes.get("/all", (req, res) => {
@@ -59,35 +59,22 @@ routes.get("/all", (req, res) => {
 });
 
 
-
-
-
-
-routes.post('/upload', upload.single('image'), (req, res) => {
-    try {
-        res.send(req.file);
-    } catch (err) {
-        res.send(400);
-    }
-});
-
-
 routes.post('/upload/:empid', upload.single('image'), async (req, res) => {
     try {
         const empid = req.params.empid;
-        console.log(req.file.path);
         if (req.file.path) {
             let updateEmployee = await employee_controller.updateEmployee(empid, req.file.path);
             if (updateEmployee) {
                 await res.status(200).json({
                     status: true,
-                    employee: updateEmployee
+                    file_updated: true                   
                 });
             } else {
                 await res.status(200).json({
                     status: false,
                     employee: updateEmployee,
-                    msg: 'Employee not found'
+                    msg: 'Employee not found',
+                    file_updated: false
                 });
             }
 
@@ -112,8 +99,6 @@ routes.get('/download', function (req, res) {
         res.send(400);
     }
 });
-
-
 
 
 

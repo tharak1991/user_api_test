@@ -12,11 +12,9 @@ module.exports = async (req, res, next) => {
 
     try {
         let decoded = jwt.verify(jwtToken, config.jwt.key);
-        // const user_info = {_id: user[0]._id};
-        // req.body = {...req.body, user_info};
-        if(decoded){
+        if (decoded) {
             next();
-        }else {
+        } else {
             res.status(403).json({
                 status: false,
                 error: true,
@@ -24,7 +22,7 @@ module.exports = async (req, res, next) => {
                 original: user
             });
         }
-       
+
     } catch (e) {
         res.status(403).json({
             status: false,
@@ -34,4 +32,3 @@ module.exports = async (req, res, next) => {
         });
     }
 };
-
