@@ -2,7 +2,6 @@ const express = require('express');
 const routes = express.Router();
 
 const user_controller = require('../controllers/user.controller');
-const email_controller = require("../controllers/email.controller");
 const token_controller = require('../controllers/token.controller');
 const {userType} = require("../utils/enum");
 
@@ -12,148 +11,103 @@ routes.post('/register', async (req, res, next) => {
         let finalData = user_controller.getFinalData(req.body, userType.EMAIL);
         let user = await user_controller.save(finalData);
        // await email_controller.sendOTP(user._id);
-        await res.json({status: true, user: user._id});
+        await res.status(201).json({status: true, user: user._id});
     } catch (e) {
         console.error(e);
-        await res.json({status: false, error: e});
+        await res.status(500).json({status: false, error: e});
     }
 });
 
-routes.post('/register/google', async (req, res, next) => {
-    try {
-        let finalData = user_controller.getFinalData(req.body, userType.GOOGLE);
-        let user = await user_controller.save(finalData);
-        let token = token_controller.sign(user._id);
-        await res.json({status: true, token, user});
-    } catch (e) {
-        console.error(e);
-        next();
-    }
-});
-routes.post('/register/facebook', async (req, res, next) => {
-    try {
-        let finalData = user_controller.getFinalData(req.body, userType.FACEBOOK);
-        await user_controller.save(finalData);
-        await res.json({status: true});
-    } catch (e) {
-        console.error(e);
-        next();
-    }
-});
-routes.post('/register/instagram', async (req, res, next) => {
-    try {
-        let finalData = user_controller.getFinalData(req.body, userType.INSTAGRAM);
-        await user_controller.save(finalData);
-        await res.json({status: true});
-    } catch (e) {
-        console.error(e);
-        next();
-    }
-});
 
-routes.post('/register/applesso', async (req, res, next) => {
-    try {
-        let finalData = user_controller.getFinalData(req.body, userType.APPLESSO);
-        await user_controller.save(finalData);
-        await res.json({status: true});
-    } catch (e) {
-        console.error(e);
-        next();
-    }
-});
-routes.post('/register/twitter', async (req, res, next) => {
-    try {
-        let finalData = user_controller.getFinalData(req.body, userType.TWITTER);
-        let user = await user_controller.save(finalData);
-        let token = token_controller.sign(user._id);
-        await res.json({status: true, token, user});
-    } catch (e) {
-        console.error(e);
-        next();
-    }
-});
+
 
 routes.post("/login", async (req, res, next) => {
     try {
         let {email, password} = req.body;
         user_controller.checkPassword(req.body.password);
         let user = await user_controller.login(email, password);
+        console.log(user);
         if (user) {
             delete user.password;
-            if (user.verified) {
+           
                 let token = token_controller.sign(user._id);
-                await res.json({status: true, token, user});
-            } else {
-                await res.json({status: false, verified: false, userId: user._id, token: {}});
-            }
+                await res.status(200).json({status: true, token, user});
         } else {
             await res.json({status: false, token: {}});
         }
     } catch (e) {
         console.error(e);
+        res.status(500).json({status: false, error: e});
         next();
     }
 });
 
-routes.post("/otp/validate", async (req, res, next) => {
+
+routes.post("/logout", async (req, res, next) => {
+    //Sice jwt token is stateless, delete token from client side and remove it from header of requests
     try {
-        let {otp, user} = req.body;
-        let validate = await email_controller.validateOTP(otp, user);
-        if (validate) {
-            let user_data = await user_controller.getById(user);
-            let token = token_controller.sign(user_data._id);
-            await res.json({status: true, user: user_data, token});
-        } else {
-            await res.json({status: false});
+        if (!req.headers.Authorization || !req.headers.Authorization.startsWith('Bearer ')) {
+            res.status(200).json({status: true, is_logged_out: true});
+            return;
+        }else{
+            res.status(200).json({status: true, is_logged_out: false});
+            return;
         }
     } catch (e) {
         console.error(e);
-        next();
+        res.status(500).json({status: false, error: e});
+        return;
     }
 });
-routes.post("/otp/resend", async (req, res, next) => {
+
+
+routes.get("/all", async (req, res, next) => {
     try {
-        let {user} = req.body;
-        let resend = await email_controller.sendOTP(user);
-        if (resend) {
-            await res.json({status: true});
-        } else {
-            await res.json({status: false});
+        let users = await user_controller.getAllUsers();
+        console.log(users);
+        if(users.length > 0){
+            await res.status(200).json({status: true, users: users});
+        }else{
+            await res.status(200).json({status: false, users: users, msg: 'No users'});
         }
     } catch (e) {
         console.error(e);
+        res.status(500).json({status: false, error: e});
         next();
     }
 });
 
-routes.post("/login/social", async (req, res, next) => {
+routes.get("/:id", async (req, res, next) => {
     try {
-        let user = await user_controller.loginSocial(req.body);
-        if (user) {
-            if (!user.verified) {
-                await user_controller.verifyUser(user._id);
-            }
-            let token = token_controller.sign(user._id);
-            await res.json({status: true, token, user});
-        } else {
-            await res.json({status: false, token: {}});
+        const id = req.params.id
+        console.log(id);
+        let user = await user_controller.getById(id);
+        console.log(user);
+        if(user){
+            await res.status(200).json({status: true, user: user});
+        }else{
+            await res.status(200).json({status: false,user: user, msg: 'User not found'});
         }
     } catch (e) {
         console.error(e);
+        res.status(500).json({status: false, error: e});
         next();
     }
 });
 
-routes.post("/check/token", async (req, res, next) => {
+
+
+routes.post("/token/verify", async (req, res, next) => {
     try {
         let token = token_controller.verify(req.body.token);
         if (token) {
-            await res.json({status: true});
+            await res.status(200).json({status: true, token_valid: true});
         } else {
-            await res.json({status: false});
+            await res.status(200).json({status: false, token_valid: false});
         }
     } catch (e) {
         console.error(e);
+        res.status(500).json({status: false, error: e});
         next();
     }
 });

@@ -9,10 +9,6 @@ const developmentConfig = {
     REFRESH_TOKEN_SECRET: 'REFRESH_TOKEN_SECRET',
     REFRESH_TOKEN_OPTIONS: {
         expiresIn: '7d',
-    },
-    mail: {
-        username: "no-reply@airbuk.com",
-        password: "Qwerty171",
     }
 };
 
