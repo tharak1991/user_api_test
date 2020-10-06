@@ -23,6 +23,6 @@ final.fixer = {
     appKey: '62f6e72fe39a5bd6a213f3b763d5b5ad',
 };
 
-final.port = PORT || 3004;
+final.port = PORT || 4001;
 
 module.exports = final;

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=DEV nodemon src/bin/www",
+    "start": "NODE_ENV=PRO nodemon src/bin/www",
     "start:prod": "NODE_ENV=PRO node src/bin/www",
     "lint": "eslint ./src/",
     "lint:fix": "eslint --fix ./src/"
