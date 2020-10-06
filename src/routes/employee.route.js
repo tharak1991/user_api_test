@@ -16,7 +16,6 @@ routes.post('/add', async (req, res, next) => {
     try {
         const emp_req = req.body;
         let employee = await employee_controller.save(emp_req);
-        // await email_controller.sendOTP(user._id);
         await res.status(201).json({
             status: true,
             employee: employee
@@ -31,6 +30,39 @@ routes.post('/add', async (req, res, next) => {
 });
 
 
+/***
+ * Promise Imeplementation
+ */
+
+routes.get("/all", (req, res) => {
+
+    employee_controller.getAllEmployees().then((employees) => {
+        if (employees.length > 0) {
+            res.status(200).json({
+                status: true,
+                employees: employees
+            });
+        } else {
+            res.status(200).json({
+                status: false,
+                employees: employees,
+                msg: 'No users'
+            });
+        }
+    }).catch((error) => {
+        console.error(e);
+        res.status(500).json({
+            status: false,
+            error: e
+        });
+    });
+});
+
+
+
+
+
+
 routes.post('/upload', upload.single('image'), (req, res) => {
     try {
         res.send(req.file);
@@ -40,11 +72,11 @@ routes.post('/upload', upload.single('image'), (req, res) => {
 });
 
 
-routes.post('/upload/:empid', upload.single('image'),async (req, res) => {
+routes.post('/upload/:empid', upload.single('image'), async (req, res) => {
     try {
         const empid = req.params.empid;
         console.log(req.file.path);
-        if(req.file.path){
+        if (req.file.path) {
             let updateEmployee = await employee_controller.updateEmployee(empid, req.file.path);
             if (updateEmployee) {
                 await res.status(200).json({
@@ -72,14 +104,45 @@ routes.post('/upload/:empid', upload.single('image'),async (req, res) => {
 
 
 
-routes.get('/download', function(req, res){
+routes.get('/download', function (req, res) {
     try {
-    var file = '/home/tarak/Tarak/Projects/assignments/ent-bot/ent_bot_test/images' + '/test1.jpg';
-    res.download(file);
-}catch (err) {
-    res.send(400);
-}
-  });
+        var file = '/home/tarak/Tarak/Projects/assignments/ent-bot/ent_bot_test/images' + '/test1.jpg';
+        res.download(file);
+    } catch (err) {
+        res.send(400);
+    }
+});
+
+
+
+
+
+routes.get("/:id", async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        let employee = await employee_controller.getById(id);
+        if (employee) {
+            await res.status(200).json({
+                status: true,
+                employee: employee
+            });
+        } else {
+            await res.status(200).json({
+                status: false,
+                employee: employee,
+                msg: 'User not found'
+            });
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({
+            status: false,
+            error: e
+        });
+        next();
+    }
+});
+
 
 
 routes.use('*', (req, res) => {
