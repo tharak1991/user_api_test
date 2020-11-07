@@ -7,7 +7,6 @@ const userSchema = new Schema({
     email: {type: String, required: true },
     phone: {type: String, required: true },
     password: {type: String},
-    isloggedin: {type: Boolean,default: true},
     addedDate: {type: Date, required: true, default: new Date()},
     lastActive: {type: Date, required: true, default: new Date()},
 });
