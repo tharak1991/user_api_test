@@ -5,5 +5,6 @@ const developmentConfig = {
 };
 
 developmentConfig.DB_URI = `${developmentConfig.DB_URL}/${developmentConfig.DB_NAME}`;
+developmentConfig.secret = 'qweqweqwe';
 
 module.exports = developmentConfig;

@@ -5,5 +5,6 @@ const productionConfig = {
 };
 
 productionConfig.DB_URI = `${productionConfig.DB_URL}/${productionConfig.DB_NAME}`;
+productionConfig.secret = 'qweqweqwe';
 
 module.exports = productionConfig;

@@ -1,5 +1,7 @@
+const config = require('../config/index');
 const express = require('express');
 const routes = express.Router();
+const jwt = require('jsonwebtoken');
 
 const user_controller = require('../controllers/user.controller');
 const {
@@ -7,15 +9,17 @@ const {
 } = require("../utils/enum");
 
 
-routes.post('/register', async (req, res, next) => {
+routes.post('/', async (req, res, next) => {
     try {
-        user_controller.checkPassword(req.body.password);
+
         let finalData = user_controller.getFinalData(req.body, userType.EMAIL);
         let user = await user_controller.save(finalData);
+
+        const token = jwt.sign({ id: user._id }, config.secret, { expiresIn: 86400 });
         
         await res.status(201).json({
             status: true,
-            user_id: user._id
+            token: token
         });
     } catch (e) {
         console.error(e);
