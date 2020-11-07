@@ -9,6 +9,6 @@ const config = {
 const final = config[NODE_ENV];
 
 
-final.port = PORT || 3000;
+final.port = PORT || 3001;
 
 module.exports = final;
