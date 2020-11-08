@@ -1,7 +1,7 @@
-const config = require('../config/index');
+// const config = require('../config/index');
 const express = require('express');
 const routes = express.Router();
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 
 const user_controller = require('../controllers/user.controller');
 const {
@@ -15,11 +15,11 @@ routes.post('/', async (req, res, next) => {
         let finalData = user_controller.getFinalData(req.body, userType.EMAIL);
         let user = await user_controller.save(finalData);
 
-        const token = jwt.sign({ id: user._id }, config.secret, { expiresIn: 86400 });
+        // const token = jwt.sign({ id: user._id }, config.secret, { expiresIn: 86400 });
         
         await res.status(201).json({
             status: true,
-            token: token
+            user_id: user._id
         });
     } catch (e) {
         console.error(e);

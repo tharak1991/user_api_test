@@ -32,7 +32,7 @@ exports.verifyUser = async (userId) => {
     await user_model.findByIdAndUpdate(userId, {$set: {verified: true}})
 };
 
-exports.getById = async id => {
+exports.getById = async (id) => {
     let user = await user_model.findById(id);
     delete user.password;
     return user;
